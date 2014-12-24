@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Jumbotron Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../../assets/css/bootstrap.css" rel="stylesheet">
+    <link href="../../../assets/css/styles.css" rel="stylesheet">
+ 
+
+    <!-- Custom styles for this template -->
+    
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" onClick="return home();"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <div class="navbar-form navbar-right" >
+           <div style="color:#fff;display:inline;"> Hi {{username}}! </div>
+            <input type="submit" name="submit" value="Sign Out" onClick = "return signOut()" class="btn btn-success" style="margin-left:5px"/> 
+			
+          </div>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+    </br>
+</br>
+	
+      <div class="container">	
+    	<br/>
+    	
+    	<div class="registration" style="display:inline; margin-left:200px;">
+     	
+     	<input type="text" name="search_business1" id="search_business1" placeholder="Search Business" required/>
+     	<input type="text" name="search_city1" id="search_city1" placeholder="Search City" required/>
+     	
+     	<button class="btn btn-success" data-toggle="modal" data-target="#myModal" onClick="return modalClick();" >
+  		Search
+		</button>
+     	</div> 
+     	
+     	
+      
+      <br/>
+      <br/>
+      <div id="arrow1">
+      <div style="display:block; margin-left:30px; font-weight:bold;padding-top:5px;">
+      Recommendations
+      </div>
+      </div>
+       <br/>
+      <div id="recommendations">
+      <table class="table table-hover" style="font-family:calibri;padding: 3px 15px;">
+      <thead>
+      <tr style="background-color:#c41200;color:#fff">
+      <td style="display:none"> Business ID </td>
+      <td> Bussiness </td>
+      <td> Average Rating </td>
+      <td> Business Details </td>
+      <td> Write Review </td>
+      </tr>
+      </thead>
+      <tbody>
+      {{#recoList}}
+	 <tr class="item">
+	 <td style="display:none">{{business_id}} </td>
+	 <td><span><strong>{{name}}</strong> </span><br/> {{full_address}} </td>
+	 <td> {{stars}} </td>
+	 <td> <button name="details">Business Details</button> </td>
+	 <td> <button name="review">Write Review</button> </td>
+	 </tr>
+	 {{/recoList}}
+      </tbody>
+      
+      </table>
+      </div>
+      <br/>
+      <br/>
+      <div id="arrow2">
+      <div style="display:block; margin-left:30px; font-weight:bold;padding-top:5px;min-width:200px;">
+      Search Results
+      </div>
+      </div>
+       <br/>
+       
+     <div id="normalResults"> 
+     <table id="bizResults" class="table table-hover" style="font-family:calibri;padding: 3px 15px;">
+     
+      <thead>
+      <tr style="background-color:#c41200;color:#fff">
+      <td style="display:none"> Business ID </td>
+      <td> Bussiness </td>
+      <td> Average Rating </td>
+      <td style="display:none"> Latitude </td>
+      <td style="display:none"> Longitude</td>
+      <td> Business Details </td>
+      <td> Write Review </td>
+      </tr>
+      </thead>
+      <tbody>
+      
+      
+	 {{#searchList}}
+	 <tr class="item">
+	 <td style="display:none">{{business_id}} </td>
+	 <td><span><strong>{{name}}</strong> </span><br/> {{full_address}} </td>
+	 <td> {{stars}} </td>
+	 <td style="display:none">{{latitude}} </td>
+	 <td style="display:none">{{longitude}} </td>
+	 <td> <button name="details">Business Details</button> </td>
+	 <td> <button name="review">Write Review</button> </td>
+	 </tr>
+	 {{/searchList}}
+	 </table>
+	 </div>
+	 </div>
+    </div>				
+					
+    <div style="height:300px" class="container">
+    <div  style="height:100%" id="map-canvas"></div>
+    </div> <!-- /container -->
+    
+    
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Select your preferences</h4>
+      </div>
+      <div class="modal-body" style="margin-left: 70px;">
+       	<br/>
+       	<form method="POST" id="searchBiz" >
+    	
+     	<input type="hidden" name="search_business" id="search_business" placeholder="Search Business" required/>
+     	<input type="hidden" name="search_city" id="search_city" placeholder="Search City" required/>
+     	<input style="display:none" type="text" name="curLatitude" id="curLatitude"  />
+     	<input style="display:none" type="text" name="curLongitude" id="curLongitude" />
+     	
+     	<strong>Day:</strong>
+     	<select name="search_day" id="search_day" placeholder="Day">
+ 			<option value="Monday">Monday</option>
+  			<option value="Tuesday">Tuesday</option>
+  			<option value="Wednesday">Wednesday</option>
+  			<option value="Thursday">Thursday</option>
+  			<option value="Friday">Friday</option>
+  			<option value="Saturday">Saturday</option>
+  			<option value="Sunday">Sunday</option>
+		</select>&nbsp;&nbsp;
+		
+		<strong>Start Time:</strong>
+		<select name="search_startTime" id="search_startTime" placeholder="Start time">
+ 			<option value="00:00">00:00</option>
+  			<option value="01:00">01:00</option>
+  			<option value="02:00">02:00</option>
+  			<option value="03:00">03:00</option>
+  			<option value="04:00">04:00</option>
+  			<option value="05:00">05:00</option>
+  			<option value="06:00">06:00</option>
+  			<option value="07:00">07:00</option>
+  			<option value="08:00">08:00</option>
+  			<option value="09:00">09:00</option>
+  			<option value="10:00">10:00</option>
+  			<option value="11:00">11:00</option>
+  			<option value="12:00">12:00</option>
+  			<option value="13:00">13:00</option>
+  			<option value="14:00">14:00</option>
+  			<option value="15:00">15:00</option>
+  			<option value="16:00">16:00</option>
+  			<option value="17:00">17:00</option>
+  			<option value="18:00">18:00</option>
+  			<option value="19:00">19:00</option>
+  			<option value="20:00">20:00</option>
+  			<option value="21:00">21:00</option>
+  			<option value="22:00">22:00</option>
+  			<option value="23:00">23:00</option>
+		</select>&nbsp;&nbsp;
+		<strong>End Time:</strong>
+     	<select name="search_endTime" id="search_endTime" placeholder="End time">
+ 			<option value="00:00">00:00</option>
+  			<option value="01:00">01:00</option>
+  			<option value="02:00">02:00</option>
+  			<option value="03:00">03:00</option>
+  			<option value="04:00">04:00</option>
+  			<option value="05:00">05:00</option>
+  			<option value="06:00">06:00</option>
+  			<option value="07:00">07:00</option>
+  			<option value="08:00">08:00</option>
+  			<option value="09:00">09:00</option>
+  			<option value="10:00">10:00</option>
+  			<option value="11:00">11:00</option>
+  			<option value="12:00">12:00</option>
+  			<option value="13:00">13:00</option>
+  			<option value="14:00">14:00</option>
+  			<option value="15:00">15:00</option>
+  			<option value="16:00">16:00</option>
+  			<option value="17:00">17:00</option>
+  			<option value="18:00">18:00</option>
+  			<option value="19:00">19:00</option>
+  			<option value="20:00">20:00</option>
+  			<option value="21:00">21:00</option>
+  			<option value="22:00">22:00</option>
+  			<option value="23:00">23:00</option>
+		</select>
+     	<br/><br/><br/>	
+     	<strong>Facilities:</strong><br/><br/>
+     	<input type="checkbox" name="parking" id="parking">&nbsp; Parking &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     	<input type="checkbox" name="creditcards" id="creditcards">	&nbsp; Accept Credit Cards &nbsp;&nbsp;&nbsp; <br/><br/>
+     	
+     	<strong>(Only for Restaurants business):</strong><br/><br/>
+     	<input type="checkbox" name="takeout" id="takeout">&nbsp;Take-out &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     	<input type="checkbox" name="kids" id="kids">&nbsp;Good for Kids &nbsp;&nbsp;&nbsp; <br/><br/>
+     	<input type="checkbox" name="wifi" id="wifi">&nbsp;&nbsp;Wi-Fi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     	<input type="checkbox" name="groups" id="groups">&nbsp;Good for Groups &nbsp;&nbsp;&nbsp; <br/><br/>
+     	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit"  value="Submit" class="btn btn-success" />
+     	</form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	 <script src="//code.jquery.com/jquery.js"></script>
+	 <script src="../../assets/js/app.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAja5FiokzlJmdgUUzq0MJKsF3qkZ8xf8c&sensor=false">
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+ <script type="text/javascript">
+        $(document).ready(function() {
+
+        var map;
+        var lat = 32.960389;
+        var long = -111.338143;
+        
+        var mapOptions = {
+        zoom: 8,
+        center: new google.maps.LatLng(33.479306999999999, -111.9864),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+                            mapOptions);
+        var oTable = document.getElementById('bizResults');
+        var rowLength = oTable.rows.length;
+        var busName =[];
+        var infowindow = new google.maps.InfoWindow();
+        navigator.geolocation.getCurrentPosition(myLoc)
+       // var options = { enableHighAccuracy: true, maximumAge: 100, timeout: 60000 };
+   //	if( navigator.geolocation) {
+   	//	var watchID = navigator.geolocation.watchPosition( gotPos, gotErr, options );
+   		//var timeout = setTimeout( function() { navigator.geolocation.clearWatch( watchID ); }, 5000 );
+	//} else { gotErr(); }
+        
+        function myLoc(position)
+        {
+                lat = position.coords.latitude;
+                long = position.coords.longitude;
+                if (lat>34){
+                        lat = 32.960389;
+                        long = -111.338143;
+                }      
+        document.getElementById("curLatitude").value = lat;
+        document.getElementById("curLongitude").value = long;  
+        //alert("inside=" + document.getElementById("curLatitude").value);
+        //alert("inside=" +document.getElementById("curLongitude").value);  
+         var you = new google.maps.Marker({
+                        position: new google.maps.LatLng(lat, long),
+                        map: map,
+                        title: 'You are Here!'
+                    });   
+           
+          you.setMap(map);  
+        }
+        
+        //alert(lat);
+        //alert(long);
+         
+       
+        for (i = 1; i < rowLength; i++){
+        //loops through rows
+
+       var oCells = oTable.rows.item(i).cells;
+       //gets cells of current row
+       var cellLength = oCells.length;
+         var latitude = oCells.item(3).innerHTML;
+       var longitude = oCells.item(4).innerHTML;
+       var business = oCells.item(1).innerHTML;
+       busName.push(business);
+       //alert("Adding Marker");
+        var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(latitude, longitude),
+                        map: map,
+                        title: 'Click Me'
+                    });
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                infowindow.setContent(busName[i]);
+                infowindow.open(map, marker);
+                }
+                })(marker, i));
+                marker.setMap(map);
+    }
+        
+
+ 
+	});
+	
+	
+	
+	/*$(".item").click(function(){
+	
+		var pathArray=window.location.pathname.split('/');
+		var user=pathArray[2];
+		var business_id = $(this).children(":first-child").text();
+		window.location = '/kaizen/'+user+'/'+business_id;
+		
+		});*/
+		
+	$(":button").click(function(){
+		var button_pressed=$(this).attr("name");
+		
+		
+		var pathArray=window.location.pathname.split('/');
+		var user=pathArray[2];
+		var business_id = $(this).parent().parent().children(":first-child").text();
+		if(button_pressed == "details"){
+		window.location = '/kaizen/'+user+'/'+business_id;
+		}
+		else if(button_pressed == "review"){
+		window.location = '/kaizen/'+user+'/review/'+business_id;
+		}
+		});
+	
+	
+	$("#arrow1").click(function(){
+		$("#recommendations").slideToggle(1000);
+	});
+			
+		
+	$("#arrow2").click(function(){
+		$("#normalResults").slideToggle(1000);
+	});
+	
+	
+	function modalClick(){
+		var business = $("#search_business1").val();
+		var city = $("#search_city1").val();
+		
+		if(business == "" || city == "")
+		{
+			alert("Please enter the fields!");
+		}
+		
+		$("#search_business").val(business);
+		$("#search_city").val(city);
+	}
+	
+	function signOut(){	
+		var pathArray=window.location.pathname.split('/');
+		var user=pathArray[2];
+		
+		$.ajax({
+		  type: 'POST',
+		  
+		  url: '/kaizen/'+user+'/home/signout',
+		  success: function() {
+			  	window.location = '/kaizen/';
+			  },
+			error:function(xhr, statusText){
+							if (xhr.status == 200)
+							{
+								window.location = '/kaizen/';
+							}
+			}  
+		});
+	}
+	
+	function home(){
+	
+		var pathArray=window.location.pathname.split('/');
+		var user=pathArray[2];
+		
+		window.location="/kaizen/"+user+"/home";
+		
+	}
+	
+	
+	</script>
+  </body>
+</html>

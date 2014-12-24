@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Jumbotron Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+	Hi {{username}}
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" onClick="return home();"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <div class="navbar-form navbar-right" >
+           <div style="color:#fff;display:inline;"> Hi {{username}}! </div>
+            <input type="submit" name="submit" value="Sign Out" onClick = "return signOut()" class="btn btn-success" style="margin-left:5px"/> 
+			
+          </div>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+    </br>
+</br>
+	
+      <div class="container" >	
+    <a href="/kaizen/{{username}}/home/" style="color:maroon"> &#x25c0; &nbsp; Back to Results </a>
+      
+      <br/>
+      <br/>
+     <table id="business" class="table table-hover" style="font-family:calibri;padding: 3px 15px;margin: 0 auto; width: 90%;">
+      <thead>
+      <tr style="background-color:#c41200;color:#fff;">
+      <td> Business Details</td><td></td>
+      <td>&nbsp;&nbsp; Subscribe </td>
+       <td>&nbsp;&nbsp; Coupons </td>
+      </tr>	
+      </thead>
+      <tbody>
+      
+      
+	 {{#business}}
+	 <tr class="item">
+	 <td style="width: 15%;">
+	 <div style="display:none">Business ID: </div>
+	 <div><strong>Name:</strong> </div>
+	 <div><strong>Address:</strong> </div>
+	 <div><strong>Categories:</strong> </div>
+	 <div style="display:none">Latitude: </div>
+	 <div style="display:none">Longitude: </div>
+	 <div><strong>Rating:</strong> </div>
+	 <td>
+	 <div style="display:none">{{business_id}} </div>
+         <div id="businessname">{{name}} </div>
+         <div id="full_address">{{full_address}} </div>
+         <div id = "categories">{{categories}} </div>
+         <div id="latitude" style="display:none">{{latitude}} </div>
+         <div id="longitude" style="display:none">{{longitude}} </div>
+         <div>{{stars}} </div>
+	 </td>
+	
+	 <td> <br/><br/><button name="subscribe">Subscribe</button> </td>
+	 	 <td> <br/><br/><button name="coupon">Get Coupons</button> </td>
+	 
+	 </tr>
+	 {{/business}}
+	 </table>
+	 </div>
+    </div>
+
+			 
+					
+    <div style="height:300px" class="container">
+    <div  style="height:100%" id="map-canvas"></div>
+    </div> <!-- /container -->
+    
+    <div class="container">
+      <!-- Example row of columns -->
+     
+
+      <hr>
+
+      <footer>
+        <p>&copy; Company 2014</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	 <script src="//code.jquery.com/jquery.js"></script>
+   <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAja5FiokzlJmdgUUzq0MJKsF3qkZ8xf8c&sensor=false">
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script type = "text/javascript">
+	$(":button").click(function(){
+		var button_pressed=$(this).attr("name");
+		var pathArray=window.location.pathname.split('/');
+		var user=pathArray[2];
+		var business_id = pathArray[3];
+		var tableData = document.getElementById('business');
+		var rowLength = tableData.rows.length;
+		for (i = 1; i < rowLength; i++){
+		var oCells = tableData.rows.item(i).cells;
+		var items = oCells.item(1).innerHTML;
+		}
+		var cat = document.getElementById('categories').innerHTML;
+		var cat1 = cat.replace('[ "',"");
+		var category = cat1.replace('"]',"");
+		 var address = document.getElementById('full_address').innerHTML;
+		var zip1 = cat[2];
+		var length = cat[2].length;
+		
+		
+		var zip = address.slice(-6);
+	
+		
+		
+		if(button_pressed == "subscribe"){
+	
+		window.location = '/kaizen/'+user+'/'+business_id+'/subscribe';
+		}
+		else if (button_pressed == "coupon")
+		{
+		
+			window.location = '/kaizen/coupons/'+user+'/'+category+'/'+zip;
+		}
+		});
+	function signOut(){
+		
+		var pathArray=window.location.pathname.split('/');
+		var user=pathArray[2];
+		var bid=pathArray[3];
+		
+		$.ajax({
+		  type: 'POST',
+		  
+		  url: '/kaizen/'+user+'/'+bid+'/signout',
+		  success: function() {
+			  	window.location = '/kaizen/';
+			  },
+			error:function(xhr, statusText){
+							if (xhr.status == 200)
+							{
+								window.location = '/kaizen/';
+							}
+			}  
+		});
+		
+	}
+	
+     $(document).ready(function() {
+        var latitude = document.getElementById('latitude').innerHTML;
+        var longitude = document.getElementById('longitude').innerHTML;
+        var business = document.getElementById('businessname').innerHTML;
+        var full_address = document.getElementById('full_address').innerHTML;
+        var map;
+        var mapOptions = {
+        zoom: 12,
+        center: new google.maps.LatLng(latitude, longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+                            mapOptions);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(latitude, longitude),
+                        map: map,
+                        title: 'Click Business'
+                });
+                google.maps.event.addListener(marker, 'click', (function(marker) {
+                return function() {
+                infowindow.setContent(business+'<br/>'+full_address);
+                infowindow.open(map, marker);
+                }
+                })(marker));
+         marker.setMap(map);
+        });
+	
+	function home(){
+	
+		var pathArray=window.location.pathname.split('/');
+		var user=pathArray[2];
+		
+		window.location="/kaizen/"+user+"/home";
+		
+	}
+	</script>
+
+	</body>
+</html>
